@@ -1,0 +1,202 @@
+#include<stdio.h>
+FILE * fp;
+int input();
+int browse();
+int search();
+int delete();
+int hangshu = 2;
+main()
+{
+	int tag;
+	fp=fopen("addressbook.txt","a+");
+	while(1)
+	{
+		printf("******************");
+		printf("信息录入功能请选1");
+		printf("******************");
+		printf("\n");
+		printf("******************");
+		printf("信息浏览功能请选2");
+		printf("******************");
+		printf("\n");
+		printf("******************");
+		printf("搜索功能请按3");
+		printf("******************");
+		printf("\n");
+		printf("******************");
+		printf("删除联系人请按4");
+		printf("******************");
+		printf("\n");
+		printf("******************");
+		printf("退出本系统请按0");
+		printf("******************");
+		printf("\n");
+		scanf("%d",&tag);
+		if(tag==0)
+			break;
+		switch(tag)
+		{
+			case 1:
+				input();
+				break;
+			case 2:
+				browse();
+				break;
+			case 3:
+				search();
+				break;
+			case 4:
+				delete();
+				break;
+			default:
+				printf("您输入的信息有误，请重新输入！\n");
+		}
+	}
+}
+int input()		//学生信息输入函数
+{
+	while(1)
+	{
+		fp=fopen("addressbook.txt","a+");
+		char name[20];
+		printf("请输入姓名：");
+		scanf("%s",name);
+		fputs("name:", fp);
+		fputs(name,fp);
+		fputs("   ",fp);
+		
+		char address[40];
+		printf("请输入通信地址：");
+		scanf("%s",address);
+		fputs("address:", fp);
+		fputs(address,fp);
+		fputs("   ",fp);
+		
+		char postalCode[30];
+		printf("请输入邮政编码：");
+		scanf("%s",postalCode);
+		fputs("postalCode:", fp);
+		fputs(postalCode,fp);
+		fputs("   ",fp);
+		
+		char phoneCode[30];
+		printf("请输入联系电话：");
+		scanf("%s",phoneCode);
+		fputs("phoneCode:", fp);
+		fputs(phoneCode,fp);
+		fputs("\n",fp);
+		hangshu++;
+		fclose(fp);
+		
+		getchar();
+		printf("是否继续输入？是请按Y，否请按N");
+		char xuanze;
+		scanf("%c",&xuanze);
+		if (xuanze != 'Y'&&xuanze != 'y')
+			break;
+	}
+	return 0;
+}
+int browse()
+{
+	FILE * _fp;
+	_fp=fopen("addressbook.txt","r");
+	printf("%c",getc(_fp));
+	printf("%c",getc(_fp));
+	char str[100];
+	while(fgets(str,100,_fp))
+		printf("%s",str);
+	return 0;
+}
+int search()
+{
+	printf("请输入要搜索的姓名或联系电话\n");
+	char searching[30];
+	scanf("%s",searching);
+	int i=0;
+	FILE * _fp;
+	_fp=fopen("addressbook.txt","r");
+	char ch[200];
+	while (fgets(ch, 200, _fp))
+	{
+		int j = 0, tag = 0;
+		i = 0;
+		while (ch[i] != '\0')
+		{
+			if (ch[i] == searching[j])
+			{
+				int k = i;
+				while (ch[k++] == searching[j++]);
+				if (searching[j - 1] == '\0')
+					tag = 1;
+			}
+			j=0;
+			if (tag == 1)
+			{
+				printf("%s", ch);
+				tag = 0;
+				break;
+			}
+			i++;
+		}
+	}
+	getchar();
+	return 0;
+}
+int delete()
+{	FILE * _fp_;
+	_fp_=fopen("addressbook_.txt","w+");
+	printf("请输入要删除的姓名或联系电话\n");
+	char searching[30];
+	scanf("%s",searching);
+	int i=0;
+	FILE * _fp;
+	_fp=fopen("addressbook.txt","a+");
+	char ch[200];
+	while (fgets(ch, 200, _fp))
+	{
+		int j = 0, tag = 0;
+		i = 0;
+		while (ch[i] != '\0')
+		{
+			if (ch[i] == searching[j])
+			{
+				int k = i;
+				while (ch[k++] == searching[j++]);
+				if (searching[j - 1] == '\0')
+					tag = 1;
+			}
+			j=0;
+			i++;
+		}
+		
+		if(tag!=1)
+		{	
+			fputs(ch,_fp_);
+		}
+		tag=0;
+	}
+	fclose(_fp);
+	fclose(_fp_);
+	printf("1");
+	_fp = fopen("addressbook.txt", "w+");
+	_fp_ = fopen("addressbook_.txt", "r+");
+	char c[200];
+	while (fgets(c, 100, _fp_))
+		fputs(c,_fp);
+	fclose(_fp);
+	fclose(_fp_);
+	getchar();
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
